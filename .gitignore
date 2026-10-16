@@ -1,0 +1,12 @@
+target/
+dist/
+.worktrees/
+.idea/
+*.iml
+.vscode/
+.DS_Store
+.env
+.codex/
+.claude/worktrees/
+dependency-reduced-pom.xml
+__pycache__/

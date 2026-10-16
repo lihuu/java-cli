@@ -1,0 +1,50 @@
+package io.github.lihuu.javacli;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
+import org.junit.jupiter.api.Test;
+
+/** Lightweight source guards, not a complete Java parser or nullness checker. */
+class SourceConventionsTest {
+    private static final Pattern VAR_DECLARATION = Pattern.compile(
+            "^\\s*(?:final\\s+)?var\\s+[A-Za-z_$]");
+
+    @Test
+    void javaSourcesUseExplicitLocalTypes() throws IOException {
+        List<String> offenders = new ArrayList<>();
+        for (Path source : sources()) {
+            List<String> lines = Files.readAllLines(source);
+            for (int i = 0; i < lines.size(); i++) {
+                if (VAR_DECLARATION.matcher(lines.get(i)).find()) {
+                    offenders.add(source + ":" + (i + 1));
+                }
+            }
+        }
+        assertTrue(offenders.isEmpty(), "Use explicit local types: " + offenders);
+    }
+
+    @Test
+    void productionCodeUsesAnnotatedNullContracts() throws IOException {
+        List<String> offenders = new ArrayList<>();
+        for (Path source : sources()) {
+            if (source.startsWith(Path.of("src/main/java")) && Files.readString(source).contains("requireNonNull")) {
+                offenders.add(source.toString());
+            }
+        }
+        assertTrue(offenders.isEmpty(), "Use @NotNull and javac2 instrumentation: " + offenders);
+    }
+
+    private static List<Path> sources() throws IOException {
+        Path root = Path.of("src");
+        assertTrue(Files.isDirectory(root), "Run tests from the project root");
+        try (Stream<Path> files = Files.walk(root)) {
+            return files.filter(path -> path.toString().endsWith(".java")).toList();
+        }
+    }
+}
