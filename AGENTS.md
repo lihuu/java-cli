@@ -10,6 +10,10 @@
 
 ## Scope and code quality
 
+- Communicate in the user's current language. Lead with the outcome; distinguish verified facts, assumptions and unverified checks.
+- Inspect available context before asking questions. Continue authorized work; ask only when missing information materially changes scope or risk.
+- Search within the current workspace using explicit paths. Do not inspect unrelated directories or private files without explicit authorization.
+
 - Treat the user's objective as closed scope. Inspect relevant code before editing; preserve unrelated work.
 - Choose the smallest maintainable change. Do not add interfaces, factories, registries, empty packages, or generic helpers for possible future requirements.
 - Do not use `var`, including in tests. Declare local types explicitly.
