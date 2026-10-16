@@ -16,21 +16,8 @@
         <picocli.version>4.7.7</picocli.version>
         <junit.version>6.0.3</junit.version>
         <annotations.version>26.1.0</annotations.version>
-        <intellij.compiler.version>262.10315.174</intellij.compiler.version>
         <native.maven.plugin.version>1.1.4</native.maven.plugin.version>
     </properties>
-    <repositories>
-        <repository>
-            <id>jetbrains.intellij.releases</id>
-            <url>https://cache-redirector.jetbrains.com/intellij-repository/releases</url>
-            <snapshots><enabled>false</enabled></snapshots>
-        </repository>
-        <repository>
-            <id>jetbrains.3rdparty</id>
-            <url>https://cache-redirector.jetbrains.com/intellij-dependencies</url>
-            <snapshots><enabled>false</enabled></snapshots>
-        </repository>
-    </repositories>
     <dependencies>
         <dependency>
             <groupId>info.picocli</groupId><artifactId>picocli</artifactId>
@@ -39,18 +26,6 @@
         <dependency>
             <groupId>org.jetbrains</groupId><artifactId>annotations</artifactId>
             <version>${annotations.version}</version><scope>provided</scope>
-        </dependency>
-        <!-- Build-time contract instrumentation; excluded from runtime artifacts. -->
-        <dependency>
-            <groupId>com.jetbrains.intellij.java</groupId><artifactId>java-compiler-ant-tasks</artifactId>
-            <version>${intellij.compiler.version}</version><scope>provided</scope>
-            <!-- CLI null checks do not use the GUI Designer runtime. -->
-            <exclusions>
-                <exclusion>
-                    <groupId>com.jetbrains.intellij.java</groupId>
-                    <artifactId>java-gui-forms-rt</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId><artifactId>junit-jupiter</artifactId>
@@ -96,27 +71,6 @@
                     </execution>
                     <execution>
                         <id>default-testCompile</id><configuration><proc>none</proc></configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId><artifactId>maven-antrun-plugin</artifactId>
-                <version>3.1.0</version>
-                <executions>
-                    <execution>
-                        <id>notnull-instrumentation</id><phase>process-classes</phase>
-                        <goals><goal>run</goal></goals>
-                        <configuration>
-                            <target>
-                                <taskdef name="javac2" classname="com.intellij.ant.Javac2"
-                                         classpathref="maven.compile.classpath"/>
-                                <javac2 destdir="${project.build.outputDirectory}" release="25"
-                                        encoding="UTF-8" includeantruntime="false" nowarn="true">
-                                    <src path="${project.basedir}/src/main/java"/>
-                                    <classpath refid="maven.compile.classpath"/>
-                                </javac2>
-                            </target>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>

@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 
-/** Lightweight source guards, not a complete Java parser or nullness checker. */
+/** Lightweight explicit-type guard, not a complete Java parser. */
 class SourceConventionsTest {
     private static final Pattern VAR_DECLARATION = Pattern.compile(
             "^\\s*(?:final\\s+)?var\\s+[A-Za-z_$]");
@@ -27,17 +27,6 @@ class SourceConventionsTest {
             }
         }
         assertTrue(offenders.isEmpty(), "Use explicit local types: " + offenders);
-    }
-
-    @Test
-    void productionCodeUsesAnnotatedNullContracts() throws IOException {
-        List<String> offenders = new ArrayList<>();
-        for (Path source : sources()) {
-            if (source.startsWith(Path.of("src/main/java")) && Files.readString(source).contains("requireNonNull")) {
-                offenders.add(source.toString());
-            }
-        }
-        assertTrue(offenders.isEmpty(), "Use @NotNull and javac2 instrumentation: " + offenders);
     }
 
     private static List<Path> sources() throws IOException {
