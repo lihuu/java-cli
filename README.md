@@ -78,13 +78,13 @@ pom.xml 是项目版本的唯一来源，Maven 仅过滤 application.properties�
 
 ## 依赖与代码约定
 
-默认运行时依赖只有 Picocli。JUnit 仅用于测试，JetBrains annotations 和 javac2 工具链使用 provided scope，不进入分发 JAR。
+默认运行时依赖只有 Picocli。JUnit 仅用于测试，JetBrains annotations 使用 provided scope，不进入分发 JAR。依赖可从 Maven Central 解析，POM 没有额外的 JetBrains/IDEA 仓库配置。
 
-@NotNull 不只是文档：构建在 process-classes 阶段执行 javac2，注入运行时空值检查。NullContractTest 验证实际异常行为。如果以后移除插桩，必须同时调整 AGENTS.md 的判空约定与对应测试。
+@NotNull/@Nullable 用于表达空值契约，供 IDE 和静态分析使用；构建不做字节码插桩，注解不会自动产生运行时判空。确有运行时校验需求时显式校验，可以使用 Objects.requireNonNull。
 
 Jackson、JLine、MCP、LLM SDK、日志框架与 DI 框架均未预装。JSON 需求出现时再添加 Jackson；交互编辑需求出现时再选择 JLine，并验证其 Native 元数据。
 
-完整约束见 [AGENTS.md](AGENTS.md)。SourceConventionsTest 是轻量源码检查，不是完整的 Java 解析器或空值分析器。
+完整约束见 [AGENTS.md](AGENTS.md)。SourceConventionsTest 轻量检查显式局部变量类型，不是完整的 Java 解析器。
 
 ## 开发与发布
 
