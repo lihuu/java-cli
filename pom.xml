@@ -44,10 +44,13 @@
         <dependency>
             <groupId>com.jetbrains.intellij.java</groupId><artifactId>java-compiler-ant-tasks</artifactId>
             <version>${intellij.compiler.version}</version><scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.jetbrains.intellij.java</groupId><artifactId>java-gui-forms-rt</artifactId>
-            <version>${intellij.compiler.version}</version><scope>provided</scope>
+            <!-- CLI null checks do not use the GUI Designer runtime. -->
+            <exclusions>
+                <exclusion>
+                    <groupId>com.jetbrains.intellij.java</groupId>
+                    <artifactId>java-gui-forms-rt</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId><artifactId>junit-jupiter</artifactId>
