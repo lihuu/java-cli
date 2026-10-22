@@ -123,7 +123,7 @@
                     <fallback>false</fallback>
                     <metadataRepository><enabled>false</enabled></metadataRepository>
                     <buildArgs>
-                        <buildArg>-O3</buildArg>
+                        <buildArg>-O2</buildArg>
                         <buildArg>-J-Djava.security.properties==${project.basedir}/scripts/pruned-security.properties</buildArg>
                     </buildArgs>
                 </configuration>
