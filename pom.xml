@@ -55,7 +55,7 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId><artifactId>maven-compiler-plugin</artifactId>
-                <version>3.15.0</version>
+                <version>3.16.0</version>
                 <executions>
                     <execution>
                         <id>default-compile</id>
@@ -76,11 +76,14 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId><artifactId>maven-surefire-plugin</artifactId>
-                <version>3.5.4</version>
+                <version>3.6.0</version>
+                <configuration>
+                    <useModulePath>false</useModulePath>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId><artifactId>maven-shade-plugin</artifactId>
-                <version>3.6.0</version>
+                <version>3.6.2</version>
                 <executions>
                     <execution>
                         <phase>package</phase><goals><goal>shade</goal></goals>
@@ -119,6 +122,10 @@
                     <imageName>${project.artifactId}</imageName><mainClass>${main.class}</mainClass>
                     <fallback>false</fallback>
                     <metadataRepository><enabled>false</enabled></metadataRepository>
+                    <buildArgs>
+                        <buildArg>-O3</buildArg>
+                        <buildArg>-J-Djava.security.properties==${project.basedir}/scripts/pruned-security.properties</buildArg>
+                    </buildArgs>
                 </configuration>
                 <executions>
                     <execution>
